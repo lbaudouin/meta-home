@@ -1,0 +1,69 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          kmap
+# Required-Start:    $local_fs
+# Should-Start:
+# Required-Stop:     $local_fs
+# Should-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Example initscript
+# Description:       This file should be used to construct scripts to be
+#                    placed in /etc/init.d
+### END INIT INFO
+
+# The definition of actions: (From LSB 3.1.0)
+# start         start the service
+# stop          stop the service
+# restart       stop and restart the service if the service is already running,
+#               otherwise start the service
+# try-restart	restart the service if the service is already running
+# reload	cause the configuration of the service to be reloaded without
+#               actually stopping and restarting the service
+# force-reload	cause the configuration to be reloaded if the service supports
+#               this, otherwise restart the service if it is running
+# status	print the current status of the service
+
+# The start, stop, restart, force-reload, and status actions shall be supported
+# by all init scripts; the reload and the try-restart actions are optional
+
+# Common steps to convert this skeleton into a real init script
+# 1) cp skeleton <the_real_name>
+# 2) Set DESC and NAME
+# 3) Check whether the daemon app is /usr/sbin/$NAME, if not, set it.
+# 4) Set DAEMON_ARGS if there is any
+# 5) Remove the useless code
+
+# NOTE: The skeleton doesn't support the daemon which is a script unless the
+#       pidof supports "-x" option, please see more comments for pidofproc ()
+#       in /etc/init.d/functions
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+DESC="kmap"
+NAME="kmap"
+
+. /etc/init.d/functions || exit 1
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+#
+# Function that starts the daemon/service
+#
+do_start() {
+	loadkmap < /usr/share/kmap/fr-latin9.bmap
+}
+
+
+case "$1" in
+start)
+	do_start
+	;;
+*)
+	echo "Usage: $0 {start}" >&2
+	exit 3
+	;;
+esac
+
